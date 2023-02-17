@@ -1,4 +1,4 @@
-import Phaser from 'phaser'
+import Phaser, { Time } from 'phaser'
 
 let player
 let cursors
@@ -7,6 +7,10 @@ let keySpace
 let speed = 200
 let playerBullets
 let mousepoint
+
+let enemies
+let lastCreateTime
+let timeDelay = 5
 
 class Bullet extends Phaser.GameObjects.Image {
 
@@ -42,24 +46,20 @@ class Bullet extends Phaser.GameObjects.Image {
 
     // Updates the position of the bullet each cycle
     update(time, delta) {
-        this.x += this.xSpeed * delta;
-        this.y += this.ySpeed * delta;
-        this.born += delta;
-        if (this.born > 1800) {
-            this.setActive(false);
-            this.setVisible(false);
+        if (this.active) {
+            this.x += this.xSpeed * delta;
+            this.y += this.ySpeed * delta;
+            this.born += delta;
+            if (this.born > 1800) {
+                this.setActive(false);
+                this.setVisible(false);
+            }
         }
     }
 
 }
 
-class Player extends Phaser.GameObjects.Image {
-    constructor(scene) {
-        super(scene, 0, 0, 'box');
-    }
 
-
-}
 
 export default class Shooter extends Phaser.Scene {
 
@@ -72,9 +72,8 @@ export default class Shooter extends Phaser.Scene {
     }
 
     create() {
-        player = this.physics.add.sprite(30, 30, 'box')
+        player = this.physics.add.sprite(150, 150, 'box')
         player.setCollideWorldBounds(true)
-        player.setGravity(0, 0)
 
         playerBullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
 
@@ -94,9 +93,16 @@ export default class Shooter extends Phaser.Scene {
 
             if (bullet) {
                 bullet.fire(player, mousepoint);
-                // this.physics.add.collider(enemy, bullet, enemyHitCallback);
+                this.physics.add.collider(enemies, bullet, this.enemyHitCallback);
             }
         }, this);
+
+
+        enemies = this.physics.add.group({
+            key: "box",
+            setOrigin: { x: 0, y: 0 },
+        }).setTint(0xff0000);
+
     }
 
     update() {
@@ -130,5 +136,16 @@ export default class Shooter extends Phaser.Scene {
             bullet.fire(player, target);
             // this.physics.add.collider(enemy, bullet, enemyHitCallback);
         }
+    }
+
+    enemyHitCallback(enemy, bullet) {
+        console.log(enemy, bullet)
+        enemy.destroy()
+        bullet.destroy()
+
+        enemies.create(
+            Math.random() * 1000 % 800,
+            Math.random() * 1000 % 600,
+            "box").setTint(0xff0000);
     }
 }
