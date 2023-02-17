@@ -46,14 +46,13 @@ class Bullet extends Phaser.GameObjects.Image {
 
     // Updates the position of the bullet each cycle
     update(time, delta) {
-        if (this.active) {
-            this.x += this.xSpeed * delta;
-            this.y += this.ySpeed * delta;
-            this.born += delta;
-            if (this.born > 1800) {
-                this.setActive(false);
-                this.setVisible(false);
-            }
+
+        this.x += this.xSpeed * delta;
+        this.y += this.ySpeed * delta;
+        this.born += delta;
+        if (this.born > 1800) {
+            this.setActive(false);
+            this.setVisible(false);
         }
     }
 
