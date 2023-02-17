@@ -9,8 +9,10 @@ let playerBullets
 let mousepoint
 
 let enemies
-let lastCreateTime
-let timeDelay = 5
+
+
+let score = 0
+let scoretext
 
 class Bullet extends Phaser.GameObjects.Image {
 
@@ -102,6 +104,8 @@ export default class Shooter extends Phaser.Scene {
             setOrigin: { x: 0, y: 0 },
         }).setTint(0xff0000);
 
+        scoretext = this.add.text(10, 10, "Score: 0");
+
     }
 
     update() {
@@ -126,21 +130,41 @@ export default class Shooter extends Phaser.Scene {
             player.setVelocityY(0)
         }
 
+        this.moveToPlayer(player);
+
+
     }
 
-    shoot(target) {
-        var bullet = playerBullets.get().setActive(true).setVisible(true);
+    moveToPlayer(player) {
+        let enemy = enemies.getChildren()[0]
+        let enemySpeed = 0.5
+        enemy.angle = (-180 / Math.PI) * Math.atan((player.x - enemy.x) / (player.y - enemy.y));
 
-        if (bullet) {
-            bullet.fire(player, target);
-            // this.physics.add.collider(enemy, bullet, enemyHitCallback);
+        if (player.y >= enemy.y) {
+            enemy.x += enemySpeed * Math.sin(-enemy.angle);
+            enemy.y += enemySpeed * Math.cos(-enemy.angle);
+        }
+        else {
+            enemy.x += -enemySpeed * Math.sin(-enemy.angle);
+            enemy.y += -enemySpeed * Math.cos(-enemy.angle);
         }
     }
 
+    // shoot(target) {
+    //     var bullet = playerBullets.get().setActive(true).setVisible(true);
+
+    //     if (bullet) {
+    //         bullet.fire(player, target);
+    //         // this.physics.add.collider(enemy, bullet, enemyHitCallback);
+    //     }
+    // }
+
     enemyHitCallback(enemy, bullet) {
-        console.log(enemy, bullet)
         enemy.destroy()
         bullet.destroy()
+
+        score += 10
+        scoretext.text = "Score: " + score.toString()
 
         enemies.create(
             Math.random() * 1000 % 800,
