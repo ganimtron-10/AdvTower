@@ -72,7 +72,12 @@ export default class Shooter extends Phaser.Scene {
         this.load.image('box', 'Box.png')
     }
 
-    create() {
+    init(data) {
+        this.web3 = data.web3
+    }
+
+    async create() {
+
         player = this.physics.add.sprite(150, 150, 'box')
         player.setCollideWorldBounds(true)
 
@@ -103,9 +108,14 @@ export default class Shooter extends Phaser.Scene {
             key: "box",
             setOrigin: { x: 0, y: 0 },
         }).setTint(0xff0000);
+        this.physics.add.collider(enemies, player, this.killPlayer)
 
-        scoretext = this.add.text(10, 10, "Score: 0");
+        scoretext = this.add.text(10, 30, "Score: 0");
 
+    }
+
+    killPlayer(enemies, player) {
+        player.scene.scene.start('gameover', { score: score })
     }
 
     update() {
@@ -136,18 +146,20 @@ export default class Shooter extends Phaser.Scene {
     }
 
     moveToPlayer(player) {
-        let enemy = enemies.getChildren()[0]
-        let enemySpeed = 0.5
-        enemy.angle = (-180 / Math.PI) * Math.atan((player.x - enemy.x) / (player.y - enemy.y));
+        let enemySpeed = 0.3
+        enemies.getChildren().forEach(enemy => {
+            enemy.angle = (-180 / Math.PI) * Math.atan((player.x - enemy.x) / (player.y - enemy.y));
 
-        if (player.y >= enemy.y) {
-            enemy.x += enemySpeed * Math.sin(-enemy.angle);
-            enemy.y += enemySpeed * Math.cos(-enemy.angle);
-        }
-        else {
-            enemy.x += -enemySpeed * Math.sin(-enemy.angle);
-            enemy.y += -enemySpeed * Math.cos(-enemy.angle);
-        }
+            if (player.y >= enemy.y) {
+                enemy.x += enemySpeed * Math.sin(-enemy.angle);
+                enemy.y += enemySpeed * Math.cos(-enemy.angle);
+            }
+            else {
+                enemy.x += -enemySpeed * Math.sin(-enemy.angle);
+                enemy.y += -enemySpeed * Math.cos(-enemy.angle);
+            }
+        });
+
     }
 
     enemyHitCallback(enemy, bullet) {
@@ -161,5 +173,12 @@ export default class Shooter extends Phaser.Scene {
             Math.random() * 1000 % 800,
             Math.random() * 1000 % 600,
             "box").setTint(0xff0000);
+
+        if (Math.round(Math.random())) {
+            enemies.create(
+                Math.random() * 1000 % 800,
+                Math.random() * 1000 % 600,
+                "box").setTint(0xff0000);
+        }
     }
 }

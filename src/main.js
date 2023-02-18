@@ -1,6 +1,11 @@
 import Phaser from 'phaser'
 
+import GameOver from './GameOver'
+import GameChoose from './GameChoose'
+import Home from './Home'
 import Shooter from './Shooter'
+import breakout from './breakout'
+import Breakout from './breakout'
 
 const config = {
 	type: Phaser.AUTO,
@@ -10,7 +15,7 @@ const config = {
 	physics: {
 		default: 'arcade',
 	},
-	scene: [Shooter],
+	scene: [Home, GameChoose, Shooter, Breakout, GameOver],
 }
 
 export default new Phaser.Game(config)

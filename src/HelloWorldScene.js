@@ -2,7 +2,12 @@ import Phaser from 'phaser'
 
 export default class HelloWorldScene extends Phaser.Scene {
 	constructor() {
-		super('hello-world')
+		super('helloworld')
+
+	}
+
+	init(data) {
+		console.log('go')
 	}
 
 	preload() {
