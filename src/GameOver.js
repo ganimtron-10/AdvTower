@@ -518,11 +518,14 @@ export default class GameOver extends Phaser.Scene {
 		this.text = ""
 	}
 
-	init(data) {
+	async init(data) {
 		this.lastGame = data.lastGame
 		this.score = data.score
 		this.web3 = data.web3
-		this.myContract = null
+
+		const [address] = await this.web3.eth.requestAccounts();
+		this.address = address
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0xD241b887D36a4F2f2E02b031b2EeE9fB364398bE');
 	}
 
 	preload() {
@@ -530,7 +533,7 @@ export default class GameOver extends Phaser.Scene {
 	}
 
 	create() {
-		let switchGame = this.add.text(400,
+		let switchGame = this.add.text(550,
 			500, 'SwitchGame')
 			.setOrigin(0.5)
 			.setPadding(10)
@@ -544,6 +547,7 @@ export default class GameOver extends Phaser.Scene {
 			.on('pointerover', () => switchGame.setStyle({ fill: '#f39c12' }))
 			.on('pointerout', () => switchGame.setStyle({ fill: '#FFF' }))
 
+
 		if (this.score >= 200) {
 			this.text = "You Won A fire NFT!"
 			this.claimNFT({
@@ -553,21 +557,6 @@ export default class GameOver extends Phaser.Scene {
 				color: "0xffa500"
 			})
 
-			let ClaimNFTbtn = this.add.text(this.cameras.main.centerX,
-				this.cameras.main.centerY, 'ClaimNFT & View')
-				.setOrigin(0.5)
-				.setPadding(10)
-				.setStyle({ backgroundColor: '#111' })
-				.setInteractive({ useHandCursor: true })
-				.on('pointerdown', () => {
-					this.scene.start('displaynft', {
-						web3: this.web3,
-						contract: this.myContract,
-						account: this.address
-					})
-				})
-				.on('pointerover', () => ClaimNFTbtn.setStyle({ fill: '#f39c12' }))
-				.on('pointerout', () => ClaimNFTbtn.setStyle({ fill: '#FFF' }))
 		} else if (this.score >= 100) {
 			this.text = "You Won A snow NFT!"
 			this.claimNFT({
@@ -577,21 +566,7 @@ export default class GameOver extends Phaser.Scene {
 				color: "0xfffafa"
 			})
 
-			let ClaimNFTbtn = this.add.text(this.cameras.main.centerX,
-				this.cameras.main.centerY, 'ClaimNFT & View')
-				.setOrigin(0.5)
-				.setPadding(10)
-				.setStyle({ backgroundColor: '#111' })
-				.setInteractive({ useHandCursor: true })
-				.on('pointerdown', () => {
-					this.scene.start('displaynft', {
-						web3: this.web3,
-						contract: this.myContract,
-						account: this.address
-					})
-				})
-				.on('pointerover', () => ClaimNFTbtn.setStyle({ fill: '#f39c12' }))
-				.on('pointerout', () => ClaimNFTbtn.setStyle({ fill: '#FFF' }))
+
 		} else {
 			let restart = this.add.text(this.cameras.main.centerX,
 				this.cameras.main.centerY, 'Restart')
@@ -609,14 +584,30 @@ export default class GameOver extends Phaser.Scene {
 			this.text = "Sorry You won Nothing!"
 		}
 
+		let ClaimNFTbtn = this.add.text(250,
+			500, 'ClaimNFT & View')
+			.setOrigin(0.5)
+			.setPadding(10)
+			.setStyle({ backgroundColor: '#111' })
+			.setInteractive({ useHandCursor: true })
+			.on('pointerdown', () => {
+				this.scene.start('displaynft', {
+					web3: this.web3,
+					contract: this.myContract,
+					account: this.address
+				})
+			})
+			.on('pointerover', () => ClaimNFTbtn.setStyle({ fill: '#f39c12' }))
+			.on('pointerout', () => ClaimNFTbtn.setStyle({ fill: '#FFF' }))
+
 		this.add.text(10, 10, this.text);
 
 	}
 
 	async claimNFT(nftData) {
-		const [address] = await this.web3.eth.requestAccounts();
-		this.address = address
-		this.myContract = new this.web3.eth.Contract(contract_abi, '0xD241b887D36a4F2f2E02b031b2EeE9fB364398bE');
+		// const [address] = await this.web3.eth.requestAccounts();
+		// this.address = address
+		// this.myContract = new this.web3.eth.Contract(contract_abi, '0xD241b887D36a4F2f2E02b031b2EeE9fB364398bE');
 
 
 		console.log(this.myContract)
