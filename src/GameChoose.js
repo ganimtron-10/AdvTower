@@ -25,7 +25,7 @@ export default class GameChoose extends Phaser.Scene {
 			.setPadding(10)
 			.setStyle({ backgroundColor: '#111' })
 			.setInteractive({ useHandCursor: true })
-			.on('pointerdown', this.selectGame1)
+			.on('pointerdown', this.selectGame1, this)
 			.on('pointerover', () => game1.setStyle({ fill: '#f39c12' }))
 			.on('pointerout', () => game1.setStyle({ fill: '#FFF' }))
 
@@ -35,19 +35,20 @@ export default class GameChoose extends Phaser.Scene {
 			.setPadding(10)
 			.setStyle({ backgroundColor: '#111' })
 			.setInteractive({ useHandCursor: true })
-			.on('pointerdown', this.selectGame2)
+			.on('pointerdown', this.selectGame2, this)
 			.on('pointerover', () => game2.setStyle({ fill: '#f39c12' }))
 			.on('pointerout', () => game2.setStyle({ fill: '#FFF' }))
 	}
 
 	selectGame1() {
-		this.scene.scene.start('shooter', {
+		this.scene.start('shooter', {
 			web3: this.web3
 		})
+
 	}
 
 	selectGame2() {
-		this.scene.scene.start('breakout', {
+		this.scene.start('breakout', {
 			web3: this.web3
 		})
 	}

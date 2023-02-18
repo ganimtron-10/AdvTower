@@ -8,6 +8,13 @@ export default class Breakout extends Phaser.Scene {
         this.bricks;
         this.paddle;
         this.ball;
+        this.lives = 3;
+        this.liveText;
+    }
+
+    init(data) {
+        this.web3 = data.web3
+        this.lives = 3
     }
 
     preload() {
@@ -15,6 +22,7 @@ export default class Breakout extends Phaser.Scene {
     }
 
     create() {
+        this.liveText = this.add.text(10, 10, `Lives: ${this.lives}`)
         //  Enable world bounds, but disable the floor
         this.physics.world.setBoundsCollision(true, true, true, false);
 
@@ -65,19 +73,27 @@ export default class Breakout extends Phaser.Scene {
     }
 
     resetBall() {
-        this.ball.setVelocity(0);
-        this.ball.setPosition(this.paddle.x, 500);
-        this.ball.setData('onPaddle', true);
+        if (this.lives > 1) {
+            this.ball.setVelocity(0);
+            this.ball.setPosition(this.paddle.x, 500);
+            this.ball.setData('onPaddle', true);
+            this.lives--;
+            this.liveText.text = `Lives: ${this.lives}`
+        } else {
+            this.resetLevel()
+        }
     }
 
     resetLevel() {
-        this.resetBall();
 
-        this.bricks.children.each(function (brick) {
+        // this.resetBall();
 
-            brick.enableBody(false, 0, 0, true, true);
+        // this.bricks.children.each(function (brick) {
 
-        });
+        //     brick.enableBody(false, 0, 0, true, true);
+
+        // });
+        this.scene.start('gameover', { lastGame: "breakout", web3: this.web3 })
     }
 
     hitPaddle(ball, paddle) {

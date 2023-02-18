@@ -74,6 +74,7 @@ export default class Shooter extends Phaser.Scene {
 
     init(data) {
         this.web3 = data.web3
+        score = 0
     }
 
     async create() {
@@ -108,14 +109,14 @@ export default class Shooter extends Phaser.Scene {
             key: "box",
             setOrigin: { x: 0, y: 0 },
         }).setTint(0xff0000);
-        this.physics.add.collider(enemies, player, this.killPlayer)
+        this.physics.add.collider(enemies, player, this.killPlayer, null, this)
 
         scoretext = this.add.text(10, 30, "Score: 0");
 
     }
 
     killPlayer(enemies, player) {
-        player.scene.scene.start('gameover', { score: score })
+        this.scene.start('gameover', { score: score, lastGame: "shooter", web3: this.web3 })
     }
 
     update() {

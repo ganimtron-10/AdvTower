@@ -33,10 +33,11 @@ export default class Home extends Phaser.Scene {
 		// Connect wallet if sucessfull go to next scene
 
 		if (window.ethereum) {
-			const web3 = new Web3(window.ethereum)
+			let web3 = new Web3(window.ethereum)
 			this.scene.scene.start('gamechoose', {
 				web3: web3
 			})
+
 		} else {
 			alert("Please Install MetaMask!")
 		}
