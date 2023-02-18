@@ -522,8 +522,7 @@ export default class GameOver extends Phaser.Scene {
 		this.lastGame = data.lastGame
 		this.score = data.score
 		this.web3 = data.web3
-
-		console.log(data)
+		this.myContract = null
 	}
 
 	preload() {
@@ -547,10 +546,52 @@ export default class GameOver extends Phaser.Scene {
 
 		if (this.score >= 200) {
 			this.text = "You Won A fire NFT!"
-			this.claimNFT()
+			this.claimNFT({
+				element: "fire",
+				damage: 100,
+				time: 10,
+				color: "0xffa500"
+			})
+
+			let ClaimNFTbtn = this.add.text(this.cameras.main.centerX,
+				this.cameras.main.centerY, 'ClaimNFT & View')
+				.setOrigin(0.5)
+				.setPadding(10)
+				.setStyle({ backgroundColor: '#111' })
+				.setInteractive({ useHandCursor: true })
+				.on('pointerdown', () => {
+					this.scene.start('displaynft', {
+						web3: this.web3,
+						contract: this.myContract,
+						account: this.address
+					})
+				})
+				.on('pointerover', () => ClaimNFTbtn.setStyle({ fill: '#f39c12' }))
+				.on('pointerout', () => ClaimNFTbtn.setStyle({ fill: '#FFF' }))
 		} else if (this.score >= 100) {
 			this.text = "You Won A snow NFT!"
-			this.claimNFT()
+			this.claimNFT({
+				element: "snow",
+				damage: 50,
+				time: 100,
+				color: "0xfffafa"
+			})
+
+			let ClaimNFTbtn = this.add.text(this.cameras.main.centerX,
+				this.cameras.main.centerY, 'ClaimNFT & View')
+				.setOrigin(0.5)
+				.setPadding(10)
+				.setStyle({ backgroundColor: '#111' })
+				.setInteractive({ useHandCursor: true })
+				.on('pointerdown', () => {
+					this.scene.start('displaynft', {
+						web3: this.web3,
+						contract: this.myContract,
+						account: this.address
+					})
+				})
+				.on('pointerover', () => ClaimNFTbtn.setStyle({ fill: '#f39c12' }))
+				.on('pointerout', () => ClaimNFTbtn.setStyle({ fill: '#FFF' }))
 		} else {
 			let restart = this.add.text(this.cameras.main.centerX,
 				this.cameras.main.centerY, 'Restart')
@@ -572,12 +613,24 @@ export default class GameOver extends Phaser.Scene {
 
 	}
 
-	claimNFT() {
-		let myContract = new this.web3.eth.Contract(contract_abi, '0x39B47a60912b0308445769D6Bdd6722f8842fA17', {
-			from: '0xc4f4B7e8Dc30034475FD4A069486de10A70abC2d',
-			gasPrice: '20000000000'
-		});
+	async claimNFT(nftData) {
+		const [address] = await this.web3.eth.requestAccounts();
+		this.address = address
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0xD241b887D36a4F2f2E02b031b2EeE9fB364398bE');
 
-		console.log(myContract)
+
+		console.log(this.myContract)
+
+		this.myContract.methods.mintPowerUp(address,
+			nftData.element,
+			nftData.damage,
+			nftData.time,
+			nftData.color).send({
+				from: address,
+				value: this.web3.utils.toWei('1', 'ether'),
+				gas: 2000000
+			}).then(function (recepit) {
+				console.log(recepit)
+			})
 	}
 }

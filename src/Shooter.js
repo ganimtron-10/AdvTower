@@ -163,7 +163,7 @@ export default class Shooter extends Phaser.Scene {
 
     }
 
-    enemyHitCallback(enemy, bullet) {
+    enemyHitCallback(bullet, enemy) {
         enemy.destroy()
         bullet.destroy()
 
