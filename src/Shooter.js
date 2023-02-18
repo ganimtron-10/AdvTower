@@ -150,15 +150,6 @@ export default class Shooter extends Phaser.Scene {
         }
     }
 
-    // shoot(target) {
-    //     var bullet = playerBullets.get().setActive(true).setVisible(true);
-
-    //     if (bullet) {
-    //         bullet.fire(player, target);
-    //         // this.physics.add.collider(enemy, bullet, enemyHitCallback);
-    //     }
-    // }
-
     enemyHitCallback(enemy, bullet) {
         enemy.destroy()
         bullet.destroy()
