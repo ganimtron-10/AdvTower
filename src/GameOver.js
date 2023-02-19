@@ -88,12 +88,17 @@ let contract_abi = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "_damage",
+				"name": "_bulletspeed",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_time",
+				"name": "_ballspeed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_scoreinc",
 				"type": "uint256"
 			},
 			{
@@ -264,6 +269,13 @@ let contract_abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -327,12 +339,17 @@ let contract_abi = [
 					},
 					{
 						"internalType": "uint256",
-						"name": "damage",
+						"name": "bulletspeed",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "time",
+						"name": "ballspeed",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "scoreinc",
 						"type": "uint256"
 					},
 					{
@@ -445,6 +462,50 @@ let contract_abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "powerUpList",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "element",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "bulletspeed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ballspeed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "scoreinc",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "color",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "supply",
 		"outputs": [
@@ -539,7 +600,7 @@ export default class GameOver extends Phaser.Scene {
 
 		const [address] = await this.web3.eth.requestAccounts();
 		this.address = address
-		this.myContract = new this.web3.eth.Contract(contract_abi, '0xE73c752Fb410cDe442666c413fb4C99263f80014');
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0xB4130990BA5C28DA5269c65E297e8e7924728206');
 	}
 
 	preload() {
@@ -563,22 +624,12 @@ export default class GameOver extends Phaser.Scene {
 
 
 		if (this.score >= 200) {
-			this.text = "You Won A fire NFT!"
-			this.claimNFT({
-				element: "fire",
-				damage: 100,
-				time: 10,
-				color: "0xffa500"
-			})
+			this.text = "You Won A NFT!"
+			this.claimNFT(this.genNFTData())
 
 		} else if (this.score >= 100) {
-			this.text = "You Won A snow NFT!"
-			this.claimNFT({
-				element: "snow",
-				damage: 50,
-				time: 100,
-				color: "0xfffafa"
-			})
+			this.text = "You Won A NFT!"
+			this.claimNFT(this.genNFTData())
 
 
 		} else {
@@ -620,18 +671,61 @@ export default class GameOver extends Phaser.Scene {
 
 	}
 
+	genNFTData() {
+		return {
+			element: this.randomElement(),
+			bulletspeed: this.randomNum(1, 3),
+			ballspeed: this.randomNum(1, 3),
+			scoreinc: 5 * this.randomNum(1, 3),
+			color: this.randomColor()
+		}
+	}
+
+	randomElement() {
+
+		var letters = "ABCDEFGHIJKLMNOPQRSTVWXYZ";
+
+		var ele = '';
+
+		for (var i = 0; i < this.randomNum(3, 8); i++)
+			ele += letters[(Math.floor(Math.random() * 25))];
+
+		return ele
+
+
+	}
+
+	randomColor() {
+
+		var letters = "0123456789ABCDEF";
+
+		var color = '0x';
+
+		for (var i = 0; i < 6; i++)
+			color += letters[(Math.floor(Math.random() * 16))];
+
+		return color
+
+
+	}
+
+	randomNum(min, max) {
+		return Math.floor(Math.random() * (max - min + 1) + min)
+	}
+
 	async claimNFT(nftData) {
 
 		const [address] = await this.web3.eth.requestAccounts();
 		this.address = address
-		this.myContract = new this.web3.eth.Contract(contract_abi, '0xE73c752Fb410cDe442666c413fb4C99263f80014');
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0xB4130990BA5C28DA5269c65E297e8e7924728206');
 
 		console.log(this.myContract)
 
 		this.myContract.methods.mintPowerUp(this.address,
 			nftData.element,
-			nftData.damage,
-			nftData.time,
+			nftData.bulletspeed,
+			nftData.ballspeed,
+			nftData.scoreinc,
 			nftData.color).send({
 				from: this.address,
 				value: this.web3.utils.toWei('10', 'wei'),

@@ -48,7 +48,7 @@ export default class DisplayNFT extends Phaser.Scene {
                 let x = 200, y = 50;
                 receipt.forEach(arr => {
                     arr.forEach(ele => {
-                        nftString += ele + "  "
+                        nftString += ele.toString() + "  "
                     });
 
                     y += 50

@@ -88,12 +88,17 @@ let contract_abi = [
 			},
 			{
 				"internalType": "uint256",
-				"name": "_damage",
+				"name": "_bulletspeed",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_time",
+				"name": "_ballspeed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_scoreinc",
 				"type": "uint256"
 			},
 			{
@@ -264,6 +269,13 @@ let contract_abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [
 			{
 				"internalType": "address",
@@ -327,12 +339,17 @@ let contract_abi = [
 					},
 					{
 						"internalType": "uint256",
-						"name": "damage",
+						"name": "bulletspeed",
 						"type": "uint256"
 					},
 					{
 						"internalType": "uint256",
-						"name": "time",
+						"name": "ballspeed",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "scoreinc",
 						"type": "uint256"
 					},
 					{
@@ -445,6 +462,50 @@ let contract_abi = [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "powerUpList",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "element",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "bulletspeed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "ballspeed",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "scoreinc",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "color",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "supply",
 		"outputs": [
@@ -541,7 +602,7 @@ export default class GameChoose extends Phaser.Scene {
 	async create() {
 		const [address] = await this.web3.eth.requestAccounts()
 		this.add.text(50, 0, `Wallet Connected with Address: ${address}`)
-		let myContract = new this.web3.eth.Contract(contract_abi, '0xE73c752Fb410cDe442666c413fb4C99263f80014');
+		let myContract = new this.web3.eth.Contract(contract_abi, '0xB4130990BA5C28DA5269c65E297e8e7924728206');
 
 		let game1 = this.add.text(this.cameras.main.centerX - 150,
 			this.cameras.main.centerY, 'Game 1')

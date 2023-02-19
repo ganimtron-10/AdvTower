@@ -40,17 +40,10 @@ export default class Breakout extends Phaser.Scene {
 
         this.ball = this.physics.add.image(400, 500, 'assets', 'ball2').setCollideWorldBounds(true).setBounce(1);
         if (this.nftData) {
-            this.ball.setTint(this.nftData[3])
-            switch (this.nftData[0]) {
-                case "fire":
-                    this.scorei = 10
-                    this.bspeed = 2
-                    break
-                case "snow":
-                    this.scorei = 8
-                    this.bspeed = 1.5
-                    break
-            }
+            this.ball.setTint(this.nftData[4])
+            this.bspeed = this.nftData[2]
+            this.scorei = this.nftData[3]
+
         }
         this.ball.setData('onPaddle', true);
 
@@ -85,7 +78,7 @@ export default class Breakout extends Phaser.Scene {
     hitBrick(ball, brick) {
         brick.disableBody(true, true);
         if (this.scorei) {
-            this.score += this.scorei
+            this.score += parseInt(this.scorei)
         } else {
             this.score += 5
         }

@@ -102,16 +102,9 @@ export default class Shooter extends Phaser.Scene {
             if (bullet) {
                 bullet.fire(player, mousepoint);
                 if (this.nftData) {
-                    bullet.setTint(this.nftData[3])
-                    console.log(this.nftData[0])
-                    switch (this.nftData[0]) {
-                        case "fire":
-                            bullet.speed = 2
-                            break
-                        case "snow":
-                            bullet.speed = 1.5
-                            break
-                    }
+                    bullet.setTint(this.nftData[4])
+                    console.log(this.nftData)
+                    bullet.speed = this.nftData[1]
                 }
                 this.physics.add.collider(enemies, bullet, this.enemyHitCallback, null, this);
             }
