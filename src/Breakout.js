@@ -1,3 +1,6 @@
+// This code is taken from phaser docs and modified to support the project idea
+
+
 import Phaser from 'phaser'
 
 export default class Breakout extends Phaser.Scene {
