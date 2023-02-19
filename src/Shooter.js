@@ -74,6 +74,7 @@ export default class Shooter extends Phaser.Scene {
 
     init(data) {
         this.web3 = data.web3
+        this.nftData = data.nftData
         score = 0
     }
 
@@ -100,7 +101,19 @@ export default class Shooter extends Phaser.Scene {
 
             if (bullet) {
                 bullet.fire(player, mousepoint);
-                this.physics.add.collider(enemies, bullet, this.enemyHitCallback);
+                if (this.nftData) {
+                    bullet.setTint(this.nftData[3])
+                    console.log(this.nftData[0])
+                    switch (this.nftData[0]) {
+                        case "fire":
+                            bullet.speed = 2
+                            break
+                        case "snow":
+                            bullet.speed = 1.5
+                            break
+                    }
+                }
+                this.physics.add.collider(enemies, bullet, this.enemyHitCallback, null, this);
             }
         }, this);
 
@@ -116,7 +129,7 @@ export default class Shooter extends Phaser.Scene {
     }
 
     killPlayer(enemies, player) {
-        this.scene.start('gameover', { score: score, lastGame: "shooter", web3: this.web3 })
+        this.scene.start('gameover', { nftData: this.nftData, score: score, lastGame: "shooter", web3: this.web3 })
     }
 
     update() {
@@ -166,7 +179,6 @@ export default class Shooter extends Phaser.Scene {
     enemyHitCallback(bullet, enemy) {
         enemy.destroy()
         bullet.destroy()
-
         score += 10
         scoretext.text = "Score: " + score.toString()
 

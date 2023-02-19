@@ -19,7 +19,7 @@ export default class DisplayNFT extends Phaser.Scene {
             50, 'Display NFT').setOrigin(0.5)
 
         let switchGame = this.add.text(400,
-            500, 'SwitchGame')
+            500, 'PlayGame')
             .setOrigin(0.5)
             .setPadding(10)
             .setStyle({ backgroundColor: '#111' })
@@ -45,17 +45,34 @@ export default class DisplayNFT extends Phaser.Scene {
             }).then((receipt) => {
                 console.log("displaynft", receipt)
                 let nftString = ""
+                let x = 200, y = 50;
                 receipt.forEach(arr => {
                     arr.forEach(ele => {
                         nftString += ele + "  "
                     });
-                    nftString += "\n"
+
+                    y += 50
+                    this.add.text(x, y, nftString, { fontSize: 20 }).setOrigin(0.5);
+                    let equipText = this.add.text(x + 200, y, "Equip", { fontSize: 20 }).setOrigin(0.5)
+                        .setInteractive({ useHandCursor: true })
+                        .on('pointerdown', () => {
+                            this.scene.start('gamechoose', {
+                                web3: this.web3,
+                                nftData: arr
+                            })
+                        })
+                        .on('pointerover', () => equipText.setStyle({ fill: '#f39c12' }))
+                        .on('pointerout', () => equipText.setStyle({ fill: '#FFF' }));
+
+
+                    nftString = ""
+
                 })
 
-                console.log(nftString)
 
-                this.add.text(400, 150, nftString).setOrigin(0.5);
             })
+        } else {
+            console.log("Contract undefined")
         }
 
 

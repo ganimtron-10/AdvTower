@@ -10,11 +10,13 @@ export default class Breakout extends Phaser.Scene {
         this.ball;
         this.lives = 3;
         this.liveText;
+        this.score = 0;
     }
 
     init(data) {
         this.web3 = data.web3
         this.lives = 3
+        this.nftData = data.nftData
     }
 
     preload() {
@@ -22,7 +24,8 @@ export default class Breakout extends Phaser.Scene {
     }
 
     create() {
-        this.liveText = this.add.text(10, 10, `Lives: ${this.lives}`)
+        this.scoretext = this.add.text(10, 10, `Score: ${this.score}`)
+        this.liveText = this.add.text(10, 30, `Lives: ${this.lives}`)
         //  Enable world bounds, but disable the floor
         this.physics.world.setBoundsCollision(true, true, true, false);
 
@@ -33,7 +36,18 @@ export default class Breakout extends Phaser.Scene {
             gridAlign: { width: 10, height: 6, cellWidth: 64, cellHeight: 32, x: 112, y: 100 }
         });
 
-        this.ball = this.physics.add.image(400, 500, 'assets', 'ball1').setCollideWorldBounds(true).setBounce(1);
+        this.ball = this.physics.add.image(400, 500, 'assets', 'ball2').setCollideWorldBounds(true).setBounce(1);
+        if (this.nftData) {
+            this.ball.setTint(this.nftData[3])
+            switch (this.nftData[0]) {
+                case "fire":
+                    this.scorei = 10
+                    break
+                case "snow":
+                    this.scorei = 8
+                    break
+            }
+        }
         this.ball.setData('onPaddle', true);
 
         this.paddle = this.physics.add.image(400, 550, 'assets', 'paddle1').setImmovable();
@@ -66,6 +80,8 @@ export default class Breakout extends Phaser.Scene {
 
     hitBrick(ball, brick) {
         brick.disableBody(true, true);
+        this.score += (typeof this.scorei == undefined) ? 5 : this.scorei
+        this.scoretext.text = `Score: ${this.score}`
 
         if (this.bricks.countActive() === 0) {
             this.resetLevel();
@@ -93,7 +109,7 @@ export default class Breakout extends Phaser.Scene {
         //     brick.enableBody(false, 0, 0, true, true);
 
         // });
-        this.scene.start('gameover', { lastGame: "breakout", web3: this.web3 })
+        this.scene.start('gameover', { core: this.score, lastGame: "breakout", web3: this.web3 })
     }
 
     hitPaddle(ball, paddle) {

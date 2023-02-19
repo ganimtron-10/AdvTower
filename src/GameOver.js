@@ -522,10 +522,11 @@ export default class GameOver extends Phaser.Scene {
 		this.lastGame = data.lastGame
 		this.score = data.score
 		this.web3 = data.web3
+		this.nftData = data.nftData
 
 		const [address] = await this.web3.eth.requestAccounts();
 		this.address = address
-		this.myContract = new this.web3.eth.Contract(contract_abi, '0xD241b887D36a4F2f2E02b031b2EeE9fB364398bE');
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0x0577d8d4e217AE5b1651E07E1eB6d2eda3205138');
 	}
 
 	preload() {
@@ -576,7 +577,8 @@ export default class GameOver extends Phaser.Scene {
 				.setInteractive({ useHandCursor: true })
 				.on('pointerdown', () => {
 					this.scene.start(this.lastGame, {
-						web3: this.web3
+						web3: this.web3,
+						nftData: this.nftData
 					})
 				})
 				.on('pointerover', () => restart.setStyle({ fill: '#f39c12' }))
@@ -605,19 +607,15 @@ export default class GameOver extends Phaser.Scene {
 	}
 
 	async claimNFT(nftData) {
-		// const [address] = await this.web3.eth.requestAccounts();
-		// this.address = address
-		// this.myContract = new this.web3.eth.Contract(contract_abi, '0xD241b887D36a4F2f2E02b031b2EeE9fB364398bE');
-
 
 		console.log(this.myContract)
 
-		this.myContract.methods.mintPowerUp(address,
+		this.myContract.methods.mintPowerUp(this.address,
 			nftData.element,
 			nftData.damage,
 			nftData.time,
 			nftData.color).send({
-				from: address,
+				from: this.address,
 				value: this.web3.utils.toWei('1', 'ether'),
 				gas: 2000000
 			}).then(function (recepit) {
