@@ -433,6 +433,19 @@ let contract_abi = [
 	},
 	{
 		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "supply",
 		"outputs": [
 			{
@@ -526,7 +539,7 @@ export default class GameOver extends Phaser.Scene {
 
 		const [address] = await this.web3.eth.requestAccounts();
 		this.address = address
-		this.myContract = new this.web3.eth.Contract(contract_abi, '0x0577d8d4e217AE5b1651E07E1eB6d2eda3205138');
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0xE73c752Fb410cDe442666c413fb4C99263f80014');
 	}
 
 	preload() {
@@ -586,6 +599,7 @@ export default class GameOver extends Phaser.Scene {
 			this.text = "Sorry You won Nothing!"
 		}
 
+
 		let ClaimNFTbtn = this.add.text(250,
 			500, 'ClaimNFT & View')
 			.setOrigin(0.5)
@@ -608,6 +622,10 @@ export default class GameOver extends Phaser.Scene {
 
 	async claimNFT(nftData) {
 
+		const [address] = await this.web3.eth.requestAccounts();
+		this.address = address
+		this.myContract = new this.web3.eth.Contract(contract_abi, '0xE73c752Fb410cDe442666c413fb4C99263f80014');
+
 		console.log(this.myContract)
 
 		this.myContract.methods.mintPowerUp(this.address,
@@ -616,10 +634,11 @@ export default class GameOver extends Phaser.Scene {
 			nftData.time,
 			nftData.color).send({
 				from: this.address,
-				value: this.web3.utils.toWei('1', 'ether'),
+				value: this.web3.utils.toWei('10', 'wei'),
 				gas: 2000000
 			}).then(function (recepit) {
 				console.log(recepit)
+
 			})
 	}
 }

@@ -433,6 +433,19 @@ let contract_abi = [
 	},
 	{
 		"inputs": [],
+		"name": "paused",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "supply",
 		"outputs": [
 			{
@@ -528,7 +541,7 @@ export default class GameChoose extends Phaser.Scene {
 	async create() {
 		const [address] = await this.web3.eth.requestAccounts()
 		this.add.text(50, 0, `Wallet Connected with Address: ${address}`)
-		let myContract = new this.web3.eth.Contract(contract_abi, '0x0577d8d4e217AE5b1651E07E1eB6d2eda3205138');
+		let myContract = new this.web3.eth.Contract(contract_abi, '0xE73c752Fb410cDe442666c413fb4C99263f80014');
 
 		let game1 = this.add.text(this.cameras.main.centerX - 150,
 			this.cameras.main.centerY, 'Game 1')
