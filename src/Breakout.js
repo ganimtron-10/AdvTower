@@ -84,7 +84,11 @@ export default class Breakout extends Phaser.Scene {
 
     hitBrick(ball, brick) {
         brick.disableBody(true, true);
-        this.score += (typeof this.scorei == undefined) ? 5 : this.scorei
+        if (this.scorei) {
+            this.score += this.scorei
+        } else {
+            this.score += 5
+        }
         this.scoretext.text = `Score: ${this.score}`
 
         if (this.bricks.countActive() === 0) {
@@ -132,7 +136,7 @@ export default class Breakout extends Phaser.Scene {
         else {
             //  Ball is perfectly in the middle
             //  Add a little random X to stop it bouncing straight up!
-            ball.setVelocityX(2 + Math.random() * 8);
+            ball.setVelocityX(2 * this.bspeed + Math.random() * 8);
         }
     }
 
