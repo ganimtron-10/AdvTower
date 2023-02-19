@@ -11,12 +11,14 @@ export default class Breakout extends Phaser.Scene {
         this.lives = 3;
         this.liveText;
         this.score = 0;
+        this.bspeed = 1;
     }
 
     init(data) {
         this.web3 = data.web3
         this.lives = 3
         this.nftData = data.nftData
+        this.score = 0;
     }
 
     preload() {
@@ -42,9 +44,11 @@ export default class Breakout extends Phaser.Scene {
             switch (this.nftData[0]) {
                 case "fire":
                     this.scorei = 10
+                    this.bspeed = 2
                     break
                 case "snow":
                     this.scorei = 8
+                    this.bspeed = 1.5
                     break
             }
         }
@@ -109,7 +113,7 @@ export default class Breakout extends Phaser.Scene {
         //     brick.enableBody(false, 0, 0, true, true);
 
         // });
-        this.scene.start('gameover', { core: this.score, lastGame: "breakout", web3: this.web3 })
+        this.scene.start('gameover', { score: this.score, lastGame: "breakout", web3: this.web3 })
     }
 
     hitPaddle(ball, paddle) {
@@ -118,12 +122,12 @@ export default class Breakout extends Phaser.Scene {
         if (ball.x < paddle.x) {
             //  Ball is on the left-hand side of the paddle
             diff = paddle.x - ball.x;
-            ball.setVelocityX(-10 * diff);
+            ball.setVelocityX(-10 * this.bspeed * diff);
         }
         else if (ball.x > paddle.x) {
             //  Ball is on the right-hand side of the paddle
             diff = ball.x - paddle.x;
-            ball.setVelocityX(10 * diff);
+            ball.setVelocityX(10 * this.bspeed * diff);
         }
         else {
             //  Ball is perfectly in the middle
