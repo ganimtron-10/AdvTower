@@ -1,112 +1,41 @@
-# Phaser 3 + Vite.js Template
-> Make Phaser 3 games with modern frontend tooling.
+# AdvTower 🎮
 
-![License](https://img.shields.io/badge/license-MIT-green)
+**AdvTower** is a Web3 game project that combines the captivating genres of adventure and tower defense. It introduces a unique concept where players can transfer NFTs earned in one game mode to another, enhancing their gaming experience. This project operates through a primary smart contract deployed on the Mantle + Polygon testnet, managing the NFT transfers seamlessly. 🚀
 
-## Prerequisites
+## Features 🌟
 
-You'll need [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed.
+- **Dual-Genre Gaming**: AdvTower offers two gaming modes: adventure and tower defense, each with its unique challenges and gameplay styles.
+- **NFT Integration**: Achieving specific milestones in the game unlocks transferable NFTs, acting as power-ups in the alternate game mode, "Blocker Breaker."
+- **Strategic Gameplay**: Players can strategically choose when and which NFT power-ups to deploy, adding depth and tactics to their gameplay.
+- **MetaMask Compatibility**: No installation is required; all you need is the MetaMask extension to start enjoying this Web3 gaming experience. 🦊
 
-It is highly recommended to use [Node Version Manager](https://github.com/nvm-sh/nvm) (nvm) to install Node.js and npm.
+## Technologies Used 🛠️
 
-For Windows users there is [Node Version Manager for Windows](https://github.com/coreybutler/nvm-windows).
+- **Phaser**: This powerful game development library provides the core engine capabilities, enabling the creation of engaging and interactive gameplay. 🕹️
+- **JavaScript**: The project leverages basic JavaScript for overall development and implementation.
+- **Solidity**: Smart contracts are created using Solidity, enabling NFT management and transactions. 💼
+- **Web3.js**: This library facilitates communication with the Ethereum blockchain, handling NFT transfers and interactions. 🔗
 
-Install Node.js and `npm` with `nvm`:
+## How to Run 🏃‍♂️
 
-```bash
-nvm install node
+1. Clone the repository to your local machine. 🧑‍💻
 
-nvm use node
-```
+2. Install the necessary dependencies using npm:
 
-Replace 'node' with 'latest' for `nvm-windows`.
+   ```
+   npm install
+   ```
 
-## Getting Started
+3. Start the development server:
 
-You can clone this repository or use [degit](https://github.com/Rich-Harris/degit) to scaffold the project like this:
+   ```
+   npm run start
+   ```
 
-```bash
-npx degit https://github.com/ourcade/phaser3-vite-template my-folder-name
-cd my-folder-name
+4. Open the game in your web browser at `http://localhost:3000`. 🌐
 
-npm install
-```
+Experience the fusion of adventure and tower defense with AdvTower, and explore the exciting possibilities of NFT-powered gaming. 🪄
 
-Start development server:
+---
 
-```
-npm run start
-```
-
-To create a production build:
-
-```
-npm run build
-```
-
-Production files will be placed in the `dist` folder. Then upload those files to a web server. 🎉
-
-## Project Structure
-
-```
-    .
-    ├── dist
-    ├── node_modules
-    ├── public
-    ├── src
-    │   ├── HelloWorldScene.js
-    │   ├── main.js
-	├── index.html
-    ├── package.json
-```
-
-JavaScript files are intended for the `src` folder. `main.js` is the entry point referenced by `index.html`.
-
-Other than that there is no opinion on how you should structure your project.
-
-There is an example `HelloWorldScene.js` file that can be placed inside a `scenes` folder to organize by type or elsewhere to organize by function. For example, you can keep all files specific to the HelloWorld scene in a `hello-world` folder.
-
-It is all up to you!
-
-## Static Assets
-
-Any static assets like images or audio files should be placed in the `public` folder. It'll then be served from the root. For example: http://localhost:8000/images/my-image.png
-
-Example `public` structure:
-
-```
-    public
-    ├── images
-    │   ├── my-image.png
-    ├── music
-    │   ├── ...
-    ├── sfx
-    │   ├── ...
-```
-
-They can then be loaded by Phaser with `this.image.load('my-image', 'images/my-image.png')`.
-
-# ESLint
-
-This template uses a basic `eslint` set up for code linting to help you find and fix common problems in your JavaScript code.
-
-It does not aim to be opinionated.
-
-[See here for rules to turn on or off](https://eslint.org/docs/rules/).
-
-## Dev Server Port
-
-You can change the dev server's port number by modifying the `vite.config.js` file. Look for the `server` section:
-
-```js
-{
-	// ...
-	server: { host: '0.0.0.0', port: 8000 },
-}
-```
-
-Change 8000 to whatever you want.
-
-## License
-
-[MIT License](https://github.com/ourcade/phaser3-vite-template/blob/master/LICENSE)
+**Note:** This project is still under development, and further enhancements and features are planned for future releases. 🚧
